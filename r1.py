@@ -4,6 +4,13 @@ import itertools as it
 import re
 import requests
 
+BASE = 'http://extranet.novae-restauration.ch/'
+PARAMS = {'x': 'd894ddae3c17b40b4fe7e16519f950f0',
+          'y': 'c7b3f79848b99a8e562a1df1d6285365',
+          'z': '33'}
+URL1 = BASE + 'index.php?frame=1&x={x}&y={y}&z={z}'.format(**PARAMS)
+URL2 = BASE + '/novae/traiteur/restauration/restaurant-cern.html?frame=1'
+
 
 def grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
@@ -16,11 +23,14 @@ def extract_name(bsitem):
 
 def extract_price(bsitem):
     reg = re.compile(r'CHF ([\d\.]+)')
-    return float(reg.findall(bsitem.text)[0])
+    mat = reg.findall(bsitem.text)
+    if len(mat) > 0:
+        return float(mat[0])
+    return 0.0
 
 
 def extract_table(response):
-    items = bs4.BeautifulSoup(response.text).find(
+    items = bs4.BeautifulSoup(response.text, 'lxml').find(
         'table',
         class_='menuRestaurant').findAll('table',
                                          class_='HauteurMenu')
@@ -42,11 +52,7 @@ def split_days(items):
 
 
 def get_menu():
-    URL1 = 'http://extranet.novae-restauration.ch/index.php?frame=1&x=d894ddae3c17b40b4fe7e16519f950f0&y=c7b3f79848b99a8e562a1df1d6285365&z=33'
-    URL2 = 'http://extranet.novae-restauration.ch/novae/traiteur/restauration/restaurant-cern.html?frame=1'
     s = requests.Session()
-    return split_days([extract_table(s.get(URL1)), extract_table(
-        s.post(URL2,
-               data=create_payload(2))), extract_table(
-                   s.post(URL2,
-                          data=create_payload(3)))])
+    return split_days([extract_table(s.get(URL1)),
+                       extract_table(s.post(URL2, data=create_payload(2))),
+                       extract_table(s.post(URL2, data=create_payload(3)))])
