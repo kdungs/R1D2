@@ -18,8 +18,6 @@ def load_menu():
     db = shelve.get_shelve()
     fd = first_day_of_this_week()
     day = db.get('day', None)
-    print(day)
-    print(fd)
     if day is None or day != fd:
         db['menu'] = r1.get_menu()
         db['day'] = fd
