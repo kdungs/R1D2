@@ -1,10 +1,12 @@
-from flask import (Flask, jsonify)
 import r1
+
 from datetime import (date, timedelta)
-from werkzeug.contrib.cache import SimpleCache
+from flask import (Flask, jsonify, g)
+from flask.ext import shelve
 
 app = Flask(__name__)
-cache = SimpleCache()
+app.config['SHELVE_FILENAME'] = 'shelve.db'
+shelve.init_app(app)
 
 
 def first_day_of_this_week():
@@ -12,18 +14,25 @@ def first_day_of_this_week():
     return today - timedelta(days=today.weekday())
 
 
-def menu():
-    return cache.get('menu')
-
-
-@app.before_request
 def load_menu():
-    d = cache.get('day')
+    db = shelve.get_shelve()
+    fd = first_day_of_this_week()
+    day = db.get('day', None)
+    print(day)
+    print(fd)
+    if day is None or day != fd:
+        db['menu'] = r1.get_menu()
+        db['day'] = fd
+    return db['menu']
+
+
+def menu():
+    d = g.get('day', None)
     fd = first_day_of_this_week()
     if d is None or d != fd:
-        menu = r1.get_menu()
-        cache.set('day', fd)
-        cache.set('menu', menu)
+        g.menu = load_menu()
+        g.day = d
+    return g.menu
 
 
 @app.route("/")

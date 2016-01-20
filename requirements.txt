@@ -1,5 +1,6 @@
-gunicorn
-flask
-requests
 beautifulsoup4
+flask
+flask-shelve
+gunicorn
 lxml
+requests
