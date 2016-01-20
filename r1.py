@@ -14,7 +14,7 @@ URL2 = BASE + '/novae/traiteur/restauration/restaurant-cern.html?frame=1'
 
 def grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
-    return it.izip_longest(fillvalue=fillvalue, *args)
+    return it.zip_longest(*args, fillvalue=fillvalue)
 
 
 def extract_name(bsitem):

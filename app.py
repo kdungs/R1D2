@@ -54,7 +54,7 @@ def menu_for_day(day):
             'wednesday': 2,
             'thursday': 3,
             'friday': 4}
-    if not days.has_key(day):
+    if day not in days:
         return jsonify(error=True)
     return jsonify(menu=menu()[days[day]])
 
