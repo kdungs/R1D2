@@ -1,8 +1,11 @@
 import r1
 
 from datetime import (date, timedelta)
-from flask import (Flask, jsonify, g)
+from flask import (Flask, jsonify, g, request)
 from flask.ext import shelve
+from os import getenv
+
+TELEGRAM_BOT_TOKEN = getenv('TELEGRAM_BOT_TOKEN')
 
 app = Flask(__name__)
 app.config['SHELVE_FILENAME'] = 'shelve.db'
@@ -31,6 +34,40 @@ def menu():
         g.menu = load_menu()
         g.day = d
     return g.menu
+
+
+def format_menu(day, menu):
+    return '*{day}*\n{items}'.format(
+        day=day,
+        items='\n'.join(['{} _(CHF {:.2f})_'.format(name, price)
+                         for name, price in menu]))
+
+
+def telegram_response(chat_id, text, **kwargs):
+    return jsonify(method='sendMessage', chat_id=chat_id, text=text, **kwargs)
+
+
+@app.route('/telegram/{}/'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
+def handle_telegram():
+    data = request.json
+    if 'message' not in data:
+        return 200
+    msg = data['message']
+    chatid = msg['chat']['id']
+    command = msg['text']
+    if not command[0] == '/':
+        return 200
+    if command == '/today':
+        wd = date.today().weekday()
+        if wd > 4:
+            return telegram_response(chatid, "It's the weekend. :)")
+        else:
+            return telegram_response(chatid,
+                                     format_menu(day='Today',
+                                                 menu=menu()[wd]),
+                                     parse_mode='Markdown')
+    else:
+        return 200
 
 
 @app.route("/")
