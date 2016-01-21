@@ -51,12 +51,12 @@ def telegram_response(chat_id, text, **kwargs):
 def handle_telegram():
     data = request.json
     if 'message' not in data:
-        return 200
+        return 'OK'
     msg = data['message']
     chatid = msg['chat']['id']
     command = msg['text']
     if not command[0] == '/':
-        return 200
+        return 'OK'
     if command == '/today':
         wd = date.today().weekday()
         if wd > 4:
@@ -67,7 +67,7 @@ def handle_telegram():
                                                  menu=menu()[wd]),
                                      parse_mode='Markdown')
     else:
-        return 200
+        return 'OK'
 
 
 @app.route("/")
