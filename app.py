@@ -1,4 +1,5 @@
 import r1
+from r1.helpers import first_day_of_this_week
 
 from datetime import (date, timedelta)
 from flask import (Flask, jsonify, g, request)
@@ -8,13 +9,9 @@ from os import getenv
 TELEGRAM_BOT_TOKEN = getenv('TELEGRAM_BOT_TOKEN')
 
 app = Flask(__name__)
+app.debug = True
 app.config['SHELVE_FILENAME'] = 'shelve.db'
 shelve.init_app(app)
-
-
-def first_day_of_this_week():
-    today = date.today()
-    return today - timedelta(days=today.weekday())
 
 
 def load_menu():
@@ -22,7 +19,7 @@ def load_menu():
     fd = first_day_of_this_week()
     day = db.get('day', None)
     if day is None or day != fd:
-        db['menu'] = r1.get_menu()
+        db['menu'] = r1.get_full_menu()
         db['day'] = fd
     return db['menu']
 
@@ -36,41 +33,46 @@ def menu():
     return g.menu
 
 
-def format_menu(day, menu):
-    return '*{day}*\n{items}'.format(
-        day=day,
-        items='\n'.join(['{} _(CHF {:.2f})_'.format(name, price)
-                         for name, price in menu]))
-
-
-def telegram_response(chat_id, text, **kwargs):
-    return jsonify(method='sendMessage', chat_id=chat_id, text=text, **kwargs)
-
-
-@app.route('/telegram/{}/'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
-def handle_telegram():
-    data = request.json
-    if 'message' not in data:
-        return 'OK'
-    msg = data['message']
-    chatid = msg['chat']['id']
-    command = msg.get('text')
-    if command is None or command[0] != '/':
-        return 'OK'
-    if command == '/today':
-        wd = date.today().weekday()
-        if wd > 4:
-            return telegram_response(chatid, "It's the weekend. :)")
-        else:
-            return telegram_response(chatid,
-                                     format_menu(day='Today',
-                                                 menu=menu()[wd]),
-                                     parse_mode='Markdown')
-    else:
-        return 'OK'
+# def format_menu(day, menu):
+#     return '*{day}*\n{items}'.format(
+#         day=day,
+#         items='\n'.join(['{} _(CHF {:.2f})_'.format(name, price)
+#                          for name, price in menu]))
+#
+#
+# def telegram_response(chat_id, text, **kwargs):
+#     return jsonify(method='sendMessage', chat_id=chat_id, text=text,
+#                    **kwargs)
+#
+#
+# @app.route('/telegram/{}/'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
+# def handle_telegram():
+#     data = request.json
+#     if 'message' not in data:
+#         return 'OK'
+#     msg = data['message']
+#     chatid = msg['chat']['id']
+#     command = msg.get('text')
+#     if command is None or command[0] != '/':
+#         return 'OK'
+#     if command == '/today':
+#         wd = date.today().weekday()
+#         if wd > 4:
+#             return telegram_response(chatid, "It's the weekend. :)")
+#         else:
+#             return telegram_response(chatid,
+#                                      format_menu(day='Today',
+#                                                  menu=menu()[wd]),
+#                                      parse_mode='Markdown')
+#     else:
+#         return 'OK'
 
 
 @app.route("/")
+def full_menu():
+    pass
+
+
 @app.route("/today")
 def menu_for_today():
     wd = date.today().weekday()
