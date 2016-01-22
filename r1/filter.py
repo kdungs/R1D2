@@ -7,14 +7,14 @@ def item_filter(attr, value):
         return void_filter
 
     def item_filter_impl(menu_item):
-        return menu_item[attr] == value
+        return getattr(menu_item, attr) == value
 
-    return filter_impl
+    return item_filter_impl
 
 
 def chain_filters(*args):
     def chain_filters_impl(menu_item):
-        return all([f(menu_item) for f in args])
+        return all(f(menu_item) for f in args)
 
     return chain_filters_impl
 
