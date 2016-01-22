@@ -3,24 +3,49 @@ A robot that extracts the CERN R1 menu for you.
 
 
 ## API
-`GET`-only API using [Flask](http://flask.pocoo.org). Available commands are
+`GET`-only API using [Flask](http://flask.pocoo.org). There are three types of
+commands that can be composed to query the menu.
 
+Specify the date
 ```
-/       - Get today's menu
-/today  - "
-/week   - Get menu for the whole week
-/monday - Get menu for Monday
-/…      - …
-/friday - Get menu for Friday
+/week
+/today
+/tomorrow
+/monday
+/…
+/friday
 ```
 
-example version running on [r1d2.herokuapp.com](https://r1d2.herokuapp.com).
-Test it via `curl https://r1d2.herokuapp.com/week`.
+Specify the restaurant
+```
+/r1
+/r2
+```
+
+Specify the type of dish
+```
+/menu1
+/menu2
+/vegetarian
+/speciality
+/grill
+/pasta
+/pizza
+```
+
+There is an example version running on
+[r1d2.herokuapp.com](https://r1d2.herokuapp.com). Test it via `curl
+https://r1d2.herokuapp.com/today/r1/vegetarian`.
+
+Please note that due to the super simple way this API is implemented the order
+of the parameters does not matter but using two mutually exclusive parameters
+together will result in an empty menu.
 
 The server uses `shelve` to store the menu on the server and thus reduce the
 number of times the data needs to be extracted from the Novae website.
 
 
-## CLI
-In principle, you can build your own apps using the API in whatever language
-you like. An example command line app in Python is implemented in `cli.py`.
+## Telegram bot
+In addition to the simple API, this app also runs a primitive bot for the
+[Telegram mesenger](https://telegram.org/). It's name is
+[@r1d2_bot](https://telegram.me/r1d2_bot), click on the link to chat with it.
