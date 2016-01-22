@@ -1,6 +1,3 @@
-import itertools as it
-
-
 def serialize_attr(name, value):
     if name in ('restaurant', 'type'):
         return value.name
