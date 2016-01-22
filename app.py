@@ -54,8 +54,8 @@ def handle_telegram():
         return 'OK'
     msg = data['message']
     chatid = msg['chat']['id']
-    command = msg['text']
-    if not command[0] == '/':
+    command = msg.get('text')
+    if command is None or command[0] != '/':
         return 'OK'
     if command == '/today':
         wd = date.today().weekday()
