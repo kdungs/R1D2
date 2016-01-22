@@ -1,7 +1,6 @@
 import r1
-from r1.helpers import first_day_of_this_week
-from r1.filter import filter_menu
-from filters import make_filter
+from r1.helpers import (first_day_of_this_week)
+from r1.filter import (filter_menu, make_filter)
 
 from datetime import (date, timedelta)
 from flask import (Flask, jsonify, g, request)
