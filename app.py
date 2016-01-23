@@ -2,10 +2,10 @@ import r1
 from r1.helpers import (first_day_of_this_week)
 from r1.filter import (filter_menu, make_filter)
 
-from datetime import (date, timedelta)
 from flask import (Flask, jsonify, g, request)
 from flask.ext import shelve
 from os import getenv
+from functools import partial
 
 TELEGRAM_BOT_TOKEN = getenv('TELEGRAM_BOT_TOKEN')
 
@@ -35,26 +35,32 @@ def get_menu():
 
 
 def get_(dict_, *keys, default=None):
-    print(keys)
     if dict_ is None:
         return default
     elem = dict_.get(keys[0], default)
     if len(keys) == 1:
         return elem
-    return get_nested(elem, *keys[1:], default=default)
+    return get_(elem, *keys[1:], default=default)
 
 
-@app.route('/telegram/{}'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
+def telegram_response(chat_id, text, **kwargs):
+    return jsonify(method='sendMessage', chat_id=chat_id, text=text, **kwargs)
+
+
+@app.route('/telegram/{}/'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
 def handle_telegram():
     chat_id = get_(request.json, 'message', 'chat', 'id')
     if chat_id is None:
         return 'OK'
-    return jsonify(
-        method='sendMessage',
-        chat_id=chat_id,
-        text="""Hello, friend!
-R1D2 went skiing over the weekend and will be back on Monday."""
-    )
+    response = partial(telegram_response, chat_id, parse_mode='Markdown')
+    command = get_(request.json, 'message', 'text')
+    if command is None or not command.startswith('/'):
+        return 'OK'
+    menu = get_menu()
+    cmd = command[1:]
+    menu = filter_menu(menu, make_filter([cmd, 'today']))
+    return response("""Hello, friend!
+R1D2 went skiing over the weekend and will be back on Monday.""")
 
 
 @app.route('/<path:path>')
