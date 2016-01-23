@@ -34,6 +34,29 @@ def get_menu():
     return g.menu
 
 
+def get_(dict_, *keys, default=None):
+    print(keys)
+    if dict_ is None:
+        return default
+    elem = dict_.get(keys[0], default)
+    if len(keys) == 1:
+        return elem
+    return get_nested(elem, *keys[1:], default=default)
+
+
+@app.route('/telegram/{}'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
+def handle_telegram():
+    chat_id = get_(request.json, 'message', 'chat', 'id')
+    if chat_id is None:
+        return 'OK'
+    return jsonify(
+        method='sendMessage',
+        chat_id=chat_id,
+        text="""Hello, friend!
+R1D2 went skiing over the weekend and will be back on Monday."""
+    )
+
+
 @app.route('/<path:path>')
 def json_menu(path):
     filter_ = make_filter(path.split('/'))
