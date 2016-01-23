@@ -1,4 +1,4 @@
-# R1D2
+# R1D2 [![Build Status](https://travis-ci.org/kdungs/R1D2.svg?branch=master)](https://travis-ci.org/kdungs/R1D2)
 A robot that extracts the CERN R1 menu for you.
 
 
