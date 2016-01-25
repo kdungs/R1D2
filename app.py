@@ -1,7 +1,6 @@
 import r1
 from r1.helpers import first_day_of_this_week
 from r1.filter import (filter_menu, make_filter)
-from r1.types import (Restaurant, DishType)
 
 from collections import OrderedDict
 from flask import (Flask, jsonify, g, request)
@@ -50,14 +49,12 @@ def telegram_response(chat_id, text, **kwargs):
     return jsonify(method='sendMessage', chat_id=chat_id, text=text, **kwargs)
 
 
-def format_item(item, show_dishtype=False):
-    if show_dishtype:
-        return '{type}: {name} _({price})_'.format(**item)
-    return '{name} _({price})_'.format(**item)
+def format_item(sitem):
+    return '{type}: {name} _({price})_'.format(**sitem)
 
 
 def format_menu(items):
-    s = '\n\n'.join(format_item(item) for item in items)
+    return '\n'.join(format_item(item) for item in items)
 
 
 @app.route('/telegram/{}/'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
@@ -71,9 +68,10 @@ def handle_telegram():
         return 'OK'
     menu = get_menu()
     cmd = command[1:]
-    menu = filter_menu(menu, make_filter([cmd, 'today']))
+    filter_ = make_filter(cmd.split() + ['today'])
+    menu = filter_menu(menu, filter_)
     if len(menu) > 0:
-        return response(format_menu(menu))
+        return response(format_menu(r1.serialize_menu(menu)))
     return response('There was no menu for your request.')
 
 

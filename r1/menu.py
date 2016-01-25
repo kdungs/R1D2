@@ -19,7 +19,7 @@ def extract_name(bsitem):
 
 
 def extract_price(bsitem):
-    reg = re.compile(r'([\d\.]+)')
+    reg = re.compile(r'(\d+\.?\d*)')
     mat = reg.findall(bsitem.text)
     if len(mat) > 0:
         return float(mat[0])
