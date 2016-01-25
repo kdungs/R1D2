@@ -2,19 +2,19 @@ import r1
 from r1.helpers import first_day_of_this_week
 from r1.filter import (filter_menu, make_filter)
 
-from collections import OrderedDict
-from flask import (Flask, jsonify, g, request)
+from bot import RestaurantBot
+
+from flask import (
+    Flask,
+    g,
+    jsonify,
+    request
+)
 from flask.ext import shelve
 from functools import partial
 from os import getenv
-from datetime import timedelta
 
 TELEGRAM_BOT_TOKEN = getenv('TELEGRAM_BOT_TOKEN')
-
-app = Flask(__name__)
-app.debug = True
-app.config['SHELVE_FILENAME'] = 'shelve.db'
-shelve.init_app(app)
 
 
 def load_menu():
@@ -36,43 +36,25 @@ def get_menu():
     return g.menu
 
 
-def get_(dict_, *keys, default=None):
-    if dict_ is None:
-        return default
-    elem = dict_.get(keys[0], default)
-    if len(keys) == 1:
-        return elem
-    return get_(elem, *keys[1:], default=default)
+bot = RestaurantBot(get_menu)
+bot.add_menu_action('r1', ['r1', 'today'])
+bot.add_menu_action('r2', ['r2', 'today'])
+bot.add_menu_action('today', ['today'])
+bot.add_menu_action('tomorrow', ['tomorrow'])
+bot.add_menu_action('vegetarian', ['vegetarian', 'today'])
 
-
-def telegram_response(chat_id, text, **kwargs):
-    return jsonify(method='sendMessage', chat_id=chat_id, text=text, **kwargs)
-
-
-def format_item(sitem):
-    return '{type}: {name} _({price})_'.format(**sitem)
-
-
-def format_menu(items):
-    return '\n'.join(format_item(item) for item in items)
+app = Flask(__name__)
+app.debug = True
+app.config['SHELVE_FILENAME'] = 'shelve.db'
+shelve.init_app(app)
 
 
 @app.route('/telegram/{}/'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
 def handle_telegram():
-    chat_id = get_(request.json, 'message', 'chat', 'id')
-    if chat_id is None:
+    resp = bot.respond(request.json)
+    if resp is None:
         return 'OK'
-    response = partial(telegram_response, chat_id, parse_mode='Markdown')
-    command = get_(request.json, 'message', 'text')
-    if command is None or not command.startswith('/'):
-        return 'OK'
-    menu = get_menu()
-    cmd = command[1:]
-    filter_ = make_filter(cmd.split() + ['today'])
-    menu = filter_menu(menu, filter_)
-    if len(menu) > 0:
-        return response(format_menu(r1.serialize_menu(menu)))
-    return response('There was no menu for your request.')
+    return jsonify(resp)
 
 
 @app.route('/<path:path>')
