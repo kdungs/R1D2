@@ -1,11 +1,14 @@
 import r1
-from r1.helpers import (first_day_of_this_week)
+from r1.helpers import first_day_of_this_week
 from r1.filter import (filter_menu, make_filter)
+from r1.types import (Restaurant, DishType)
 
+from collections import OrderedDict
 from flask import (Flask, jsonify, g, request)
 from flask.ext import shelve
-from os import getenv
 from functools import partial
+from os import getenv
+from datetime import timedelta
 
 TELEGRAM_BOT_TOKEN = getenv('TELEGRAM_BOT_TOKEN')
 
@@ -47,6 +50,16 @@ def telegram_response(chat_id, text, **kwargs):
     return jsonify(method='sendMessage', chat_id=chat_id, text=text, **kwargs)
 
 
+def format_item(item, show_dishtype=False):
+    if show_dishtype:
+        return '{type}: {name} _({price})_'.format(**item)
+    return '{name} _({price})_'.format(**item)
+
+
+def format_menu(items):
+    s = '\n\n'.join(format_item(item) for item in items)
+
+
 @app.route('/telegram/{}/'.format(TELEGRAM_BOT_TOKEN), methods=['POST'])
 def handle_telegram():
     chat_id = get_(request.json, 'message', 'chat', 'id')
@@ -59,8 +72,9 @@ def handle_telegram():
     menu = get_menu()
     cmd = command[1:]
     menu = filter_menu(menu, make_filter([cmd, 'today']))
-    return response("""Hello, friend!
-R1D2 went skiing over the weekend and will be back on Monday.""")
+    if len(menu) > 0:
+        return response(format_menu(menu))
+    return response('There was no menu for your request.')
 
 
 @app.route('/<path:path>')
