@@ -30,7 +30,7 @@ PARAMS = {
         'x': 'fd7538322d53ecf7f708990e221d5f36',
         'y': 'fd7538322d53ecf7f708990e221d5f36',
         'z': '145',
-        'html': 'bon-app',
+        'html': 'restaurant-cern-1',
         'pages': 2,
         'page_structure': (3, 3),
         'dishes': (DishType.menu1, DishType.menu2, DishType.menu3,
