@@ -65,10 +65,11 @@ class SimpleBot:
 
 
 def format_item(sitem):
-    return '{type}: {name} _(CHF {price:.2f})_'.format(
+    return '{type}: {name} _({currency} {price:.2f})_'.format(
         type=sitem['type'].capitalize(),
         name=sitem['name'],
-        price=sitem['price']
+        price=sitem['price'],
+		currency=sitem['currency']
     )
 
 

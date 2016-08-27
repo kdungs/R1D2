@@ -23,4 +23,4 @@ dishtype_from_string = partial(enum_from_string, DishType)
 
 
 MenuItem = namedtuple('MenuItem', ['restaurant', 'date', 'type',
-                                   'name', 'price'])
+                                   'name', 'price', 'currency'])

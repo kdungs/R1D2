@@ -67,7 +67,7 @@ def get_menu(restaurant):
     for d, ms in enumerate(items):
         day = first_day + timedelta(days=d)
         for (name, price), t in zip(ms, day_structure):
-            menu.append(MenuItem(restaurant, day, t, name, price))
+            menu.append(MenuItem(restaurant, day, t, name, price, params['currency']))
     return menu
 
 
