@@ -11,5 +11,5 @@ def serialize_item(item, attrs):
 
 
 def serialize_menu(menu):
-    attrs = ['restaurant', 'date', 'type', 'name', 'price']
+    attrs = ['restaurant', 'date', 'type', 'name', 'price', 'currency']
     return [serialize_item(item, attrs) for item in menu]
