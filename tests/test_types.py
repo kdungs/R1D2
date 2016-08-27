@@ -28,8 +28,8 @@ class TestRestaurant(unittest.TestCase):
 
 class TestDishType(unittest.TestCase):
     def test_valid_string(self):
-        valid_strs = ['menu1', 'menu2', 'menu3', 'vegetarian', 'speciality', 'grill',
-                      'pasta', 'pizza']
+        valid_strs = ['menu1', 'menu2', 'menu3', 'vegetarian', 'speciality',
+                      'grill', 'pasta', 'pizza']
         for valid_str in valid_strs:
             self.assertTrue(types.valid_string_for_dishtype(valid_str))
         self.assertFalse(types.valid_string_for_dishtype(None))
@@ -56,7 +56,8 @@ class TestDishType(unittest.TestCase):
 class TestMenuItem(unittest.TestCase):
     def test_creation(self):
         mi = types.MenuItem(types.Restaurant.r1, date.today(),
-                            types.DishType.menu1, 'Shit with sauce', 13.37, 'USD')
+                            types.DishType.menu1, 'Shit with sauce',
+                            13.37, 'USD')
         self.assertEqual(types.Restaurant.r1, mi.restaurant)
         self.assertEqual(date.today(), mi.date)
         self.assertEqual(types.DishType.menu1, mi.type)
