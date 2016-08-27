@@ -15,7 +15,7 @@ PARAMS = {
         'dishes': (DishType.menu1, DishType.menu2, DishType.vegetarian,
                    DishType.speciality, DishType.grill, DishType.pasta,
                    DishType.pizza),
-		'currency': 'CHF'
+        'currency': 'CHF'
     },
     Restaurant.r2: {
         'x': 'ad3f8f75fe1e353b972afcce8e375d6e',
@@ -26,7 +26,7 @@ PARAMS = {
         'page_structure': (3, 3),
         'dishes': (DishType.menu1, DishType.menu2, DishType.vegetarian,
                    DishType.grill, DishType.pizza, DishType.speciality),
-		'currency': 'CHF'
+        'currency': 'CHF'
     },
     Restaurant.r3: {
         'x': 'fd7538322d53ecf7f708990e221d5f36',
@@ -37,6 +37,6 @@ PARAMS = {
         'page_structure': (3, 3),
         'dishes': (DishType.menu1, DishType.menu2, DishType.menu3,
                    DishType.speciality, DishType.pizza, DishType.grill),
-		'currency': 'EUR'
+        'currency': 'EUR'
     }
 }
