@@ -1,5 +1,5 @@
 # R1D2 [![Build Status](https://travis-ci.org/kdungs/R1D2.svg?branch=master)](https://travis-ci.org/kdungs/R1D2)
-A robot that extracts the CERN R1 menu for you.
+A robot that extracts the menus of the CERN restaurants (R1, R2, R3) for you.
 
 
 ## API
@@ -20,12 +20,14 @@ Specify the restaurant
 ```
 /r1
 /r2
+/r3
 ```
 
 Specify the type of dish
 ```
 /menu1
 /menu2
+/menu3
 /vegetarian
 /speciality
 /grill

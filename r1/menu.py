@@ -72,4 +72,4 @@ def get_menu(restaurant):
 
 
 def get_full_menu():
-    return get_menu(Restaurant.r1) + get_menu(Restaurant.r2)
+    return get_menu(Restaurant.r1) + get_menu(Restaurant.r2) + get_menu(Restaurant.r3)

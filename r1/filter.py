@@ -47,6 +47,7 @@ filters = {
 
     'r1': rest_filter(Restaurant.r1),
     'r2': rest_filter(Restaurant.r2),
+	'r3': rest_filter(Restaurant.r3),
 
     'menu1': type_filter(DishType.menu1),
     'menu2': type_filter(DishType.menu2),
