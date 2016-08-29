@@ -39,6 +39,7 @@ def get_menu():
 bot = RestaurantBot(get_menu)
 bot.add_menu_action('r1', ['r1', 'today'])
 bot.add_menu_action('r2', ['r2', 'today'])
+bot.add_menu_action('r3', ['r3', 'today'])
 bot.add_menu_action('today', ['today'])
 bot.add_menu_action('tomorrow', ['tomorrow'])
 bot.add_menu_action('vegetarian', ['vegetarian', 'today'])

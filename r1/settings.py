@@ -14,7 +14,8 @@ PARAMS = {
         'page_structure': (3, 2, 2),
         'dishes': (DishType.menu1, DishType.menu2, DishType.vegetarian,
                    DishType.speciality, DishType.grill, DishType.pasta,
-                   DishType.pizza)
+                   DishType.pizza),
+        'currency': 'CHF'
     },
     Restaurant.r2: {
         'x': 'ad3f8f75fe1e353b972afcce8e375d6e',
@@ -24,6 +25,18 @@ PARAMS = {
         'pages': 2,
         'page_structure': (3, 3),
         'dishes': (DishType.menu1, DishType.menu2, DishType.vegetarian,
-                   DishType.grill, DishType.pizza, DishType.speciality)
+                   DishType.grill, DishType.pizza, DishType.speciality),
+        'currency': 'CHF'
+    },
+    Restaurant.r3: {
+        'x': 'fd7538322d53ecf7f708990e221d5f36',
+        'y': 'fd7538322d53ecf7f708990e221d5f36',
+        'z': '145',
+        'html': 'restaurant-cern-1',
+        'pages': 2,
+        'page_structure': (3, 3),
+        'dishes': (DishType.menu1, DishType.menu2, DishType.menu3,
+                   DishType.speciality, DishType.pizza, DishType.grill),
+        'currency': '€'
     }
 }
