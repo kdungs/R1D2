@@ -37,6 +37,6 @@ PARAMS = {
         'page_structure': (3, 3),
         'dishes': (DishType.menu1, DishType.menu2, DishType.menu3,
                    DishType.speciality, DishType.pizza, DishType.grill),
-        'currency': 'EUR'
+        'currency': '€'
     }
 }
