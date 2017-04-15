@@ -25,7 +25,7 @@ PARAMS = {
         'pages': 2,
         'page_structure': (3, 3),
         'dishes': (DishType.menu1, DishType.menu2, DishType.vegetarian,
-                   DishType.grill, DishType.pizza, DishType.speciality),
+                   DishType.grill, DishType.pasta, DishType.speciality),
         'currency': 'CHF'
     },
     Restaurant.r3: {
