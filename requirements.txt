@@ -4,3 +4,4 @@ flask-shelve
 gunicorn
 lxml
 requests
+flask-cors

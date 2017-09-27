@@ -10,6 +10,7 @@ from flask import (
     jsonify,
     request
 )
+from flask_cors import CORS, cross_origin
 from flask.ext import shelve
 from functools import partial
 from os import getenv
@@ -59,6 +60,7 @@ def handle_telegram():
 
 
 @app.route('/<path:path>')
+@cross_origin()
 def json_menu(path):
     filter_ = make_filter(path.split('/'))
     menu = filter_menu(get_menu(), filter_)
