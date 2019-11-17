@@ -1,4 +1,13 @@
 # R1D2 [![Build Status](https://travis-ci.org/kdungs/R1D2.svg?branch=master)](https://travis-ci.org/kdungs/R1D2)
+
+**DEPRECATED** Since the underlying restaurant website changed fundamentally,
+the code in this repository does no longer work. Fortunately, for people at
+CERN, there is an API available on the new restaurant website. Have a look at
+the [mattermost restaurants bot](https://gitlab.cern.ch/mattermost/restaurants)
+that Adrian Monnich made.
+
+_This repository is kept only to preserve the history._
+
 A robot that extracts the menus of the CERN restaurants (R1, R2, R3) for you.
 
 
